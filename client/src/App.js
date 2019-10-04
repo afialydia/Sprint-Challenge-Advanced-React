@@ -1,47 +1,46 @@
 import React from 'react';
-import API from "./Components/API";
-import './App.css';
 import Athletes from './Components/Athletes'
+import axios from 'axios';
+import './App.css';
 
 class App extends React.Component {
-
-  constructor(props){
-    super(props);
-
+  constructor(){
+    super();
     this.state = {
-      name: null,
-      country: null,
-      searches: null
-    };
+      athletes: []
+    }
+    console.log('constructor up')
   }
 
-  render() {
-    const { name, country, searches } = this.state;
+  componentDidMount(){
+    axios
+      .get('http://localhost:5000/api/players')
+      .then(res => {
+        const athletes = res.data;
+        console.log(athletes)
+        
+        this.setState({
+          athletes: res.data
+        })
+      })
 
+      .catch(err => console.log(err));
+
+    }
+
+
+
+  render(){
+    this.state.athletes &&
+    console.log(this.state.athletes)
     return (
-      <Athletes  name={name} country={country} searches= {searches}/>
-
       
-    )
-  }
+       <Athletes athletes = {this.state.athletes} />
 
-  async componentDidMount(){
-    let athleteData = await API.get('/',{
-      params:{
-        results: 1,
-        inc: 'name, country, searches'
-      }
-    });
-
-    athleteData = athleteData.data[0];
-
-    const name = `Name: ${athleteData.name}`;
-    const country = `Country: ${athleteData.country}`;
-    const searches = ` Number of Searches: ${athleteData.searches}`;
-
-    this.setState({
-      ...this.state,...{ name, country, searches}
-    })
+    );
   }
 }
+
 export default App;
+
+
