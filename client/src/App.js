@@ -1,26 +1,47 @@
 import React from 'react';
-import logo from './logo.svg';
+import API from "./Components/API";
 import './App.css';
+import Athletes from './Components/Athletes'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+  constructor(props){
+    super(props);
+
+    this.state = {
+      name: null,
+      country: null,
+      searches: null
+    };
+  }
+
+  render() {
+    const { name, country, searches } = this.state;
+
+    return (
+      <Athletes  name={name} country={country} searches= {searches}/>
+
+      
+    )
+  }
+
+  async componentDidMount(){
+    let athleteData = await API.get('/',{
+      params:{
+        results: 1,
+        inc: 'name, country, searches'
+      }
+    });
+
+    athleteData = athleteData.data[0];
+
+    const name = `Name: ${athleteData.name}`;
+    const country = `Country: ${athleteData.country}`;
+    const searches = ` Number of Searches: ${athleteData.searches}`;
+
+    this.setState({
+      ...this.state,...{ name, country, searches}
+    })
+  }
 }
-
 export default App;
