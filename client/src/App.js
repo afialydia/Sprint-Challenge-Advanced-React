@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
-import axios from 'axios'
-import Cardlist from './components/card-list/card-list.component'
+import axios from "axios";
+import Cardlist from "./components/card-list/card-list.component";
 
 class App extends Component {
 	constructor() {
@@ -13,28 +13,28 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-    axios
-    .get('http://localhost:5000/api/players')
-    .then(res => {
-      const athletes = res.data;
-      console.log(athletes)
-      
-      this.setState({
-        athletes: res.data
-      })
-    })
+		const getAthletes = (url) => {
+			axios
+				.get(url)
+				.then(res => {
+					const athletes = res.data;
+					console.log(athletes);
 
-    .catch(err => console.log(err));
-
-  }
+					this.setState({
+						athletes: res.data
+					});
+				})
+				.catch(err => console.log(err));
+		};
+		getAthletes("http://localhost:5000/api/players");
+	}
 
 	render() {
-
 		return (
-		<div>
-      <h1>World Cup Champs</h1>
-      <Cardlist athletes= {this.state.athletes} />
-    </div>
+			<div className="app">
+				<h1>Women's World Cup Athletes</h1>
+				<Cardlist athletes={this.state.athletes} />
+			</div>
 		);
 	}
 }

@@ -31,3 +31,12 @@
     transform: rotate(360deg);
   }
 }
+
+.app{
+  align-items: center;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Rubik', sans-serif;
+
+}
